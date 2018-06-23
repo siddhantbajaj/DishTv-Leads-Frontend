@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
 import { List, Avatar, Button, Spin, Rate, Tabs } from 'antd';
+import Modal from './Modal';
+import CountDownTimer from './CountDownTimer';
 
-import reqwest from 'reqwest';
 const TabPane = Tabs.TabPane;
-
-const fakeDataUrl = 'https://randomuser.me/api/?results=5&inc=name,gender,email,nat&noinfo';
 
 const IconText = ({ type, text }) => (
   <span>
@@ -45,7 +44,8 @@ const data = [
     basePrice: 200,
     name: 'Jenny',
     image: 'https://cdn.iconscout.com/public/images/icon/free/png-512/avatar-user-teacher-312a499a08079a12-512x512.png',
-    workFlow_state: 'active'
+    workFlow_state: 'active',
+    end: 'Sat, 23 Jun 2018 20:56:48 +0530'
   },
   {
     id: 'sdfdsgdfhfgafsdfdgdfd',
@@ -75,7 +75,8 @@ const data = [
     basePrice: 200,
     name: 'Jenny',
     image: 'https://cdn.iconscout.com/public/images/icon/free/png-512/avatar-user-teacher-312a499a08079a12-512x512.png',
-    workFlow_state: 'active'
+    workFlow_state: 'active',
+    end: 'June 23, 2018, 20:49'
   },
   {
     id: 'sdfdsgdfhfgafsdfdgdfd',
@@ -105,7 +106,8 @@ const data = [
     basePrice: 200,
     name: 'Jenny',
     image: 'https://cdn.iconscout.com/public/images/icon/free/png-512/avatar-user-teacher-312a499a08079a12-512x512.png',
-    workFlow_state: 'active'
+    workFlow_state: 'active',
+    end: 'June 23, 2018, 20:37'
   }
 ];
 
@@ -166,7 +168,7 @@ class ShowList extends Component {
               item.workFlow_state === 'hold' ? (
                 <List.Item
                   actions={[
-                    <Button onClick={() => {}}>Edit</Button>,
+                    <Modal text="dfssdf" data={item} />,
                     <Button
                       onClick={() => {}}
                       style={{
@@ -232,8 +234,8 @@ class ShowList extends Component {
               item.workFlow_state === 'active' ? (
                 <List.Item
                   actions={[
-                    <Button onClick={() => {}} type="primary">
-                      Timer
+                    <Button onClick={() => {}} type="primary" style={{ width: '195px' }}>
+                      <CountDownTimer targetDate={item.end} interval={1000} callback={() => alert(`${item.id} is finished`)} />
                     </Button>
                   ]}
                 >

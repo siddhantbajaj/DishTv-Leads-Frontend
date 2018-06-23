@@ -21,7 +21,7 @@ class MainLayout extends Component {
             <Content className="App-body">
               <Switch>
                 <Route exact component={Home} path="/" />
-                <Route component={Leads} path="/Leads" />
+                <Route component={Leads} path="/leads" />
               </Switch>
             </Content>
             <Footer>footer</Footer>

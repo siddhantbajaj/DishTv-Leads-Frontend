@@ -1,6 +1,6 @@
 import React from 'react';
 import { Layout, Menu, Breadcrumb, Icon, Row, Col } from 'antd';
-import { Link } from 'react-router-dom';
+import { NavLink, withRouter } from 'react-router-dom';
 import logo from '../images/dishathon_logo.svg';
 
 const { Header, Content, Footer, Sider } = Layout;
@@ -19,6 +19,8 @@ class Sidebar extends React.Component {
     this.setState({ collapsed });
   };
   render() {
+    const { location } = this.props;
+    console.log(location.pathname);
     return (
       <Sider collapsible collapsed={this.state.collapsed} onCollapse={this.onCollapse} breakpoint="sm">
         <div className="logo">
@@ -41,22 +43,22 @@ class Sidebar extends React.Component {
           )}
           {/* {!this.state.collapsed ? <AppTitle /> : null} */}
         </div>
-        <Menu defaultSelectedKeys={['1']} mode="inline">
-          <Menu.Item key="1">
-            <Link to="/">
+        <Menu defaultSelectedKeys={['1']} mode="inline" selectedKeys={[location.pathname]}>
+          <Menu.Item key="/">
+            <NavLink to="/">
               <div style={{ float: 'left' }}>
                 <Icon type="pie-chart" />
                 <span>Home</span>
               </div>
-            </Link>
+            </NavLink>
           </Menu.Item>
-          <Menu.Item key="2">
-            <Link to="/Leads">
+          <Menu.Item key="/leads">
+            <NavLink to="/leads">
               <div style={{ float: 'left' }}>
                 <Icon type="desktop" />
                 <span>Leads</span>
               </div>
-            </Link>
+            </NavLink>
           </Menu.Item>
           {/* <SubMenu
             key="sub1"
@@ -93,4 +95,4 @@ class Sidebar extends React.Component {
   }
 }
 
-export default Sidebar;
+export default withRouter(Sidebar);
