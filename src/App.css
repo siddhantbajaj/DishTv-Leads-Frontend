@@ -1,0 +1,97 @@
+@import '~antd/dist/antd.css';
+@import url('https://fonts.googleapis.com/css?family=Muli');
+/* 
+.App {
+  text-align: center;
+} */
+
+.App-logo {
+  height: 100px;
+}
+
+.logo {
+  display: flex;
+  background-color: #d6d6d6;
+  flex-flow: column;
+  align-items: center;
+  justify-content: center;
+  transition: width 1s linear;
+}
+
+.App-logo-collapsed {
+  height: 80px;
+  width: 59px;
+}
+
+.App-header {
+  background: white;
+  height: 64px;
+}
+
+.App-title {
+  font-size: 1.5em;
+  color: white;
+  text-decoration: overline;
+}
+
+.App-body {
+  background: white;
+}
+
+.App-intro {
+  font-size: large;
+}
+
+.Login-form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: rgb(238, 174, 202);
+  background: radial-gradient(circle, rgb(255, 255, 255) 0%, rgb(214, 214, 214) 100%);
+  position: relative;
+  height: 100vh;
+}
+
+.Login-form img {
+  height: 166px;
+  padding: 13px;
+}
+
+.login-form-forgot {
+  float: right;
+}
+.login-form-button {
+  width: 100%;
+}
+
+.full-screen {
+  color: red;
+}
+.header-avatar {
+  float: right;
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
+
+/* .Login-form > div {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+} */
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.ant-layout-sider {
+  background: radial-gradient(circle, rgb(255, 255, 255) 0%, rgb(214, 214, 214) 100%);
+}
+
+.ant-menu-root.ant-menu-inline {
+  background: none;
+}
