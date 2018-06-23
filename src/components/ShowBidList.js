@@ -126,30 +126,26 @@ class ShowBidList extends Component {
     assignedLeads: [],
     visible: false
   };
-  componentDidMount() {
-    this.getFirstData(res => {
-      this.setState(
-        {
-          loading: false,
-          data: res
-        },
-        () => {
-          this.getBids(_res => {
-            this.setState(
-              {
-                currentBid: _res
-              },
-              () => {
-                this.getInitialLeads(leads => {
-                  this.setState({
-                    assignedLeads: leads
-                  });
-                });
-              }
-            );
-          });
-        }
-      );
+  async componentDidMount() {
+    await this.getFirstData(res => {
+      this.setState({
+        loading: false,
+        data: res
+      });
+    });
+    await this.getBids(_res => {
+      this.setState({
+        currentBid: _res
+      });
+    });
+    await this.getInitialLeads(leads => {
+      this.setState({
+        assignedLeads: leads
+      });
+    });
+    await this.getData(bids => {
+      console.log('ffgdfgdfgfdg');
+      this.setState({ data: bids });
     });
   }
 
@@ -182,9 +178,6 @@ class ShowBidList extends Component {
 
   getData = callback => {
     const token = localStorage.getItem('token');
-    this.setState({
-      loading: true
-    });
     setInterval(() => {
       ax.get(`${baseURL}/active_leads?token=${token}`).then(res => {
         callback(res.data.data.leads);
