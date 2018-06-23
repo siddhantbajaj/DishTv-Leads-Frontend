@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { List, Avatar, Button, Spin, Rate, Tabs } from 'antd';
 import Modal from './Modal';
+import InfoModal from './InfoModal';
 import CountDownTimer from './CountDownTimer';
 
 import ax from 'axios';
@@ -115,27 +116,70 @@ function callback(key) {
 //   }
 // ];
 
-class ShowList extends Component {
+class ShowBidList extends Component {
   state = {
     loading: true,
     loadingMore: false,
     showLoadingMore: true,
     data: [],
+    currentBid: [],
+    assignedLeads: [],
     visible: false
   };
   componentDidMount() {
-    this.getData(res => {
+    this.getFirstData(res => {
       this.setState(
         {
           loading: false,
           data: res
         },
         () => {
-          console.log(this.state.data);
+          this.getBids(_res => {
+            this.setState(
+              {
+                currentBid: _res
+              },
+              () => {
+                this.getInitialLeads(leads => {
+                  this.setState({
+                    assignedLeads: leads
+                  });
+                });
+              }
+            );
+          });
         }
       );
     });
   }
+
+  getFirstData = callback => {
+    const token = localStorage.getItem('token');
+    this.setState({
+      loading: true
+    });
+    ax.get(`${baseURL}/active_leads?token=${token}`).then(res => {
+      callback(res.data.data.leads);
+      this.setState({
+        loading: false
+      });
+    });
+  };
+
+  getInitialLeads = callback => {
+    const token = localStorage.getItem('token');
+    this.setState({
+      loading: true
+    });
+    ax.get(`${baseURL}/assigned_leads?token=${token}`).then(res => {
+      console.log(res.data.data);
+      callback(res.data.data.assigned_leads);
+      this.setState({
+        loading: false
+      });
+    });
+  };
+
   getData = callback => {
     const token = localStorage.getItem('token');
     this.setState({
@@ -149,6 +193,19 @@ class ShowList extends Component {
         });
       });
     }, 5000);
+  };
+
+  getBids = callback => {
+    const token = localStorage.getItem('token');
+    this.setState({
+      loading: true
+    });
+    ax.get(`${baseURL}/bids?token=${token}`).then(res => {
+      callback(res.data.data.bids);
+      this.setState({
+        loading: false
+      });
+    });
   };
 
   goLive = id => {
@@ -168,7 +225,7 @@ class ShowList extends Component {
 
   createbid = (id, price) => {
     const token = localStorage.getItem('token');
-    ax.post(`${baseURL}/update_lead?lead_id=${id}&token=${token}&base_price=${price}`).then(res => {
+    ax.post(`${baseURL}/create_bid?lead_id=${id}&token=${token}&price=${price}`).then(res => {
       const data = res.data.data.leads;
 
       this.setState({
@@ -177,7 +234,7 @@ class ShowList extends Component {
     });
   };
 
-  leadTimeOut = id => {
+  leadTimeOutAndGetAssignedLeads = id => {
     const token = localStorage.getItem('token');
     ax.post(`${baseURL}/timeout?token=${token}&lead_id=${id}`).then(res => {
       const data = res.data.data.leads;
@@ -185,14 +242,21 @@ class ShowList extends Component {
         data
       });
     });
+    ax.post(`${baseURL}/assigned_leads?token=${token}`).then(res => {
+      const data = res.data.data.assigned_leads;
+      this.setState({
+        assignedLeads: data
+      });
+    });
   };
 
   render() {
-    const { loading, loadingMore, showLoadingMore, data } = this.state;
+    const { loading, loadingMore, showLoadingMore, data, currentBid, assignedLeads } = this.state;
+    console.log(currentBid);
     const loadMore = showLoadingMore ? <div style={{ textAlign: 'center', marginTop: 12, height: 32, lineHeight: '32px' }}>{loadingMore && <Spin />}</div> : null;
     return (
       <Tabs onChange={callback}>
-        <TabPane tab="Active" key="3">
+        <TabPane tab="Active" key="1">
           <h1>Active Leads</h1>
           <List
             className="demo-loadmore-list"
@@ -206,7 +270,7 @@ class ShowList extends Component {
                   actions={[
                     <Modal text="Bid" data={item} text2="Place Bid(₹):" updateBasePrice={newPrice => this.createbid(item.id, newPrice)} />,
                     <Button onClick={() => {}} type="primary" style={{ width: '195px' }}>
-                      <CountDownTimer targetDate={item.timeout} interval={1000} callback={() => this.leadTimeOut(item.id)} />
+                      <CountDownTimer targetDate={item.timeout} interval={1000} callback={() => this.leadTimeOutAndGetAssignedLeads(item.id)} />
                     </Button>
                   ]}
                 >
@@ -225,23 +289,17 @@ class ShowList extends Component {
             }
           />
         </TabPane>
-        <TabPane tab="Assigned" key="4">
+        <TabPane tab="Assigned" key="2">
           <h1>Assigned Leads</h1>
           <List
             className="demo-loadmore-list"
             loading={loading}
             itemLayout="horizontal"
             loadMore={loadMore}
-            dataSource={data}
+            dataSource={assignedLeads}
             renderItem={item =>
               item.workflow_state === 'assigned' ? (
-                <List.Item
-                  actions={[
-                    <Button onClick={() => {}} type="primary">
-                      Show Info
-                    </Button>
-                  ]}
-                >
+                <List.Item actions={[<InfoModal text="Show Info" data={item} />]}>
                   <List.Item.Meta avatar={<Avatar src={item.image} />} title={<a href="https://ant.design">{item.name}</a>} description={item.location} />
                   <div>
                     <div>
@@ -255,6 +313,24 @@ class ShowList extends Component {
                 <span />
               )
             }
+          />
+        </TabPane>
+        <TabPane tab="My Bids" key="3">
+          <h1>My Bids</h1>
+          <List
+            className="demo-loadmore-list"
+            loading={loading}
+            itemLayout="horizontal"
+            loadMore={loadMore}
+            dataSource={currentBid}
+            renderItem={item => (
+              <List.Item actions={[<Modal text="Edit Bid" data={item} text2="Place Bid(₹):" updateBasePrice={newPrice => this.createbid(item.id, newPrice)} />]}>
+                <div>
+                  <div style={{ textAlign: 'right' }}>{[<IconText type="Price" text={item.price} />]}</div>
+                  <div />
+                </div>
+              </List.Item>
+            )}
           />
         </TabPane>
       </Tabs>
@@ -262,4 +338,4 @@ class ShowList extends Component {
   }
 }
 
-export default ShowList;
+export default ShowBidList;
