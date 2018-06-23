@@ -10,7 +10,7 @@ class Login extends React.Component {
   render() {
     return (
       <div className="Login-form">
-        <img src={logo} />
+        <img src={logo} style={{ width: '166px' }} />
         <div style={{ position: 'relative', marginLeft: '-38px' }}>
           <span style={{ fontSize: '31px' }}>DISHTV</span>{' '}
           <b

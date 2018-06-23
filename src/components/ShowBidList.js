@@ -141,12 +141,14 @@ class ShowList extends Component {
     this.setState({
       loading: true
     });
-    ax.get(`${baseURL}/leads?token=${token}`).then(res => {
-      callback(res.data.data.leads);
-      this.setState({
-        loading: false
+    setInterval(() => {
+      ax.get(`${baseURL}/active_leads?token=${token}`).then(res => {
+        callback(res.data.data.leads);
+        this.setState({
+          loading: false
+        });
       });
-    });
+    }, 5000);
   };
 
   goLive = id => {
@@ -164,7 +166,7 @@ class ShowList extends Component {
 
   ///
 
-  updateBasePrice = (id, price) => {
+  createbid = (id, price) => {
     const token = localStorage.getItem('token');
     ax.post(`${baseURL}/update_lead?lead_id=${id}&token=${token}&base_price=${price}`).then(res => {
       const data = res.data.data.leads;
@@ -190,72 +192,6 @@ class ShowList extends Component {
     const loadMore = showLoadingMore ? <div style={{ textAlign: 'center', marginTop: 12, height: 32, lineHeight: '32px' }}>{loadingMore && <Spin />}</div> : null;
     return (
       <Tabs onChange={callback}>
-        <TabPane tab="On Hold" key="1">
-          <h1>Leads on Hold</h1>
-          <List
-            className="demo-loadmore-list"
-            loading={loading}
-            itemLayout="horizontal"
-            loadMore={loadMore}
-            dataSource={data}
-            renderItem={item =>
-              item.workflow_state === 'hold' ? (
-                <List.Item
-                  actions={[
-                    <Modal text="Edit" data={item} text2="Base Price(₹):" updateBasePrice={newPrice => this.updateBasePrice(item.id, newPrice)} />,
-                    <Button
-                      onClick={() => this.goLive(item.id)}
-                      style={{
-                        background: 'green',
-                        border: '1px solid green',
-                        color: 'white'
-                      }}
-                    >
-                      Go Live
-                    </Button>
-                  ]}
-                >
-                  <List.Item.Meta avatar={<Avatar src={item.image} />} title={<a href="https://ant.design">{item.name}</a>} description={item.location} />
-                  <div>
-                    <div>
-                      <Rate allowHalf defaultValue={item.rating} />
-                    </div>
-                    <div style={{ textAlign: 'right' }}>{[<IconText type="Base Price" text={item.base_price} />]}</div>
-                    <div />
-                  </div>
-                </List.Item>
-              ) : (
-                <span />
-              )
-            }
-          />
-        </TabPane>
-        <TabPane tab="Escalated" key="2">
-          <h1>Escalated Leads</h1>
-          <List
-            className="demo-loadmore-list"
-            loading={loading}
-            itemLayout="horizontal"
-            loadMore={loadMore}
-            dataSource={data}
-            renderItem={item =>
-              item.workflow_state === 'escalated' ? (
-                <List.Item>
-                  <List.Item.Meta avatar={<Avatar src={item.image} />} title={<a href="https://ant.design">{item.name}</a>} description={item.location} />
-                  <div>
-                    <div>
-                      <Rate allowHalf defaultValue={item.rating} />
-                    </div>
-                    <div style={{ textAlign: 'right' }}>{[<IconText type="Base Price" text={item.base_price} />]}</div>
-                    <div />
-                  </div>
-                </List.Item>
-              ) : (
-                <span />
-              )
-            }
-          />
-        </TabPane>
         <TabPane tab="Active" key="3">
           <h1>Active Leads</h1>
           <List
@@ -268,6 +204,7 @@ class ShowList extends Component {
               item.workflow_state === 'active' ? (
                 <List.Item
                   actions={[
+                    <Modal text="Bid" data={item} text2="Place Bid(₹):" updateBasePrice={newPrice => this.createbid(item.id, newPrice)} />,
                     <Button onClick={() => {}} type="primary" style={{ width: '195px' }}>
                       <CountDownTimer targetDate={item.timeout} interval={1000} callback={() => this.leadTimeOut(item.id)} />
                     </Button>

@@ -2,6 +2,10 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { Alert, Form, Icon, Input, Button, Checkbox, Spin } from 'antd';
 
+import ax from 'axios';
+
+import { baseURL } from '../config/constant';
+
 const FormItem = Form.Item;
 
 class NormalLoginForm extends Component {
@@ -14,27 +18,30 @@ class NormalLoginForm extends Component {
     console.log(this.props);
     e.preventDefault();
     this.props.form.validateFields((error, values) => {
+      console.log(values);
       if (!error) {
         this.setState({
           loading: true,
           error: null
         });
-        setTimeout(() => {
-          localStorage.setItem('token', '786r5etyfugukhgmfnbdsvfertdyfh');
-          setTimeout(() => {
+        console.log(`${baseURL}/signin`);
+        ax.post(`${baseURL}/signin?username=${values.username}&password=${values.password}`)
+          .then(response => {
+            localStorage.setItem('token', response.data.data.user.access_token);
             this.setState(
               {
                 loading: false
               },
               () => {
-                this.props.history.push('/home');
+                this.props.history.push('/');
               }
             );
-          }, 500);
-        }, 1000);
+          })
+          .catch(error => console.log(error));
       }
     });
   };
+
   render() {
     const { getFieldDecorator } = this.props.form;
     return (
@@ -42,9 +49,9 @@ class NormalLoginForm extends Component {
         {this.state.error ? <Alert description={this.state.error.description} type="error" showIcon /> : <div />}
         <Form onSubmit={this.handleSubmit} className="login-form">
           <FormItem>
-            {getFieldDecorator('email', {
-              rules: [{ required: true, message: 'Please input your email!' }]
-            })(<Input prefix={<Icon type="mail" style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder="Email" />)}
+            {getFieldDecorator('username', {
+              rules: [{ required: true, message: 'Please input your username!' }]
+            })(<Input prefix={<Icon type="text" style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder="Username" />)}
           </FormItem>
           <FormItem>
             {' '}

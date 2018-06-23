@@ -1,12 +1,16 @@
 {
   "name": "frontend",
   "version": "0.1.0",
-  "private": true,
+  "engines": {
+    "npm": "5.7.1",
+    "node": "9.5.0"
+  },
   "dependencies": {
     "antd": "^3.4.3",
     "auth0-js": "^9.5.1",
     "axios": "^0.18.0",
     "dayjs": "^1.6.9",
+    "faker": "^4.1.0",
     "history": "^4.7.2",
     "react": "^16.3.2",
     "react-dom": "^16.3.2",

@@ -95,3 +95,12 @@
 .ant-menu-root.ant-menu-inline {
   background: none;
 }
+
+.ant-menu-root.ant-menu-vertical,
+.ant-menu-root.ant-menu-vertical-left,
+.ant-menu-root.ant-menu-vertical-right,
+.ant-menu-root.ant-menu-inline {
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  background: none;
+}

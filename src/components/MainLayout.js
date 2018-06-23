@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
 import { Layout } from 'antd';
 import { Route, Switch, Redirect } from 'react-router-dom';
+
 import Home from '../pages/home';
 import Leads from '../pages/leads';
+import Distributer from '../pages/distributers';
+
 import Sidebar from './sidebar';
 import AppHeader from './Header';
 
@@ -22,6 +25,7 @@ class MainLayout extends Component {
               <Switch>
                 <Route exact component={Home} path="/" />
                 <Route component={Leads} path="/leads" />
+                <Route component={Distributer} path="/distributer" />
               </Switch>
             </Content>
             <Footer>footer</Footer>

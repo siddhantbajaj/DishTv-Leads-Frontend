@@ -3,12 +3,7 @@ import { Layout, Menu, Breadcrumb, Icon, Row, Col } from 'antd';
 import { NavLink, withRouter } from 'react-router-dom';
 import logo from '../images/dishathon_logo.svg';
 
-const { Header, Content, Footer, Sider } = Layout;
-const SubMenu = Menu.SubMenu;
-
-const AppTitle = () => {
-  return <h2 className="App-title">Absurd App</h2>;
-};
+const { Sider } = Layout;
 
 class Sidebar extends React.Component {
   state = {
@@ -24,10 +19,9 @@ class Sidebar extends React.Component {
     return (
       <Sider collapsible collapsed={this.state.collapsed} onCollapse={this.onCollapse} breakpoint="sm">
         <div className="logo">
-          <img className={this.state.collapsed === true ? 'App-logo-collapsed' : 'App-logo'} src={logo} />
+          <img className={this.state.collapsed === true ? 'App-logo-collapsed' : 'App-logo'} src={logo} style={{ width: '166px' }} />
           {this.state.collapsed === false ? (
             <div style={{ position: 'relative', marginLeft: '-38px', transform: 'scale(0.75)' }}>
-              <span style={{ fontSize: '31px' }}>DISHTV</span>
               <b
                 style={{
                   position: 'absolute',
@@ -57,6 +51,14 @@ class Sidebar extends React.Component {
               <div style={{ float: 'left' }}>
                 <Icon type="desktop" />
                 <span>Leads</span>
+              </div>
+            </NavLink>
+          </Menu.Item>
+          <Menu.Item key="/distributer">
+            <NavLink to="/distributer">
+              <div style={{ float: 'left' }}>
+                <Icon type="idcard" />
+                <span>Distributer</span>
               </div>
             </NavLink>
           </Menu.Item>
