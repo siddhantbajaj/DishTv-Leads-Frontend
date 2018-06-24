@@ -6,6 +6,7 @@ import PrivateRoute from './components/PrivateRoute';
 import MainLayout from './components/MainLayout';
 import Leads from './pages/leads';
 import Distributers from './pages/distributers';
+import LoginDistributers from './pages/loginDistributers';
 
 const NoMatch = ({ location }) => (
   <div>
@@ -20,7 +21,8 @@ class App extends Component {
     return (
       <div>
         <Switch>
-          <Route exact path="/login" component={Login} />
+          <Route path="/login" component={Login} />
+          <Route path="/loginDistributers" component={LoginDistributers} />
           <PrivateRoute component={MainLayout} path="/" />
           <PrivateRoute component={Leads} path="/leads" />
           <PrivateRoute component={Distributers} path="/distributers" />

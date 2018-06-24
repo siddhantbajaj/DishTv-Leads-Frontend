@@ -215,8 +215,8 @@ class ShowBidList extends Component {
             loading={loading}
             itemLayout="horizontal"
             loadMore={loadMore}
-            dataSource={currentBid}
-            renderItem={item => (
+            dataSource={data}
+            renderItem={(item, index) => (
               <List.Item
                 actions={[
                   <Button

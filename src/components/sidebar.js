@@ -15,6 +15,7 @@ class Sidebar extends React.Component {
   };
   render() {
     const { location } = this.props;
+    const role = localStorage.getItem('role');
     console.log(location.pathname);
     return (
       <Sider collapsible collapsed={this.state.collapsed} onCollapse={this.onCollapse} breakpoint="sm">
@@ -39,22 +40,26 @@ class Sidebar extends React.Component {
               </div>
             </NavLink>
           </Menu.Item>
-          <Menu.Item key="/leads">
-            <NavLink to="/leads">
-              <div style={{ float: 'left' }}>
-                <Icon type="desktop" />
-                <span>Leads</span>
-              </div>
-            </NavLink>
-          </Menu.Item>
-          <Menu.Item key="/distributer">
-            <NavLink to="/distributer">
-              <div style={{ float: 'left' }}>
-                <Icon type="idcard" />
-                <span>Distributer</span>
-              </div>
-            </NavLink>
-          </Menu.Item>
+          {role === 'admin' && (
+            <Menu.Item key="/leads">
+              <NavLink to="/leads">
+                <div style={{ float: 'left' }}>
+                  <Icon type="desktop" />
+                  <span>Leads</span>
+                </div>
+              </NavLink>
+            </Menu.Item>
+          )}
+          {role === 'distribution' && (
+            <Menu.Item key="/distributer">
+              <NavLink to="/distributer">
+                <div style={{ float: 'left' }}>
+                  <Icon type="idcard" />
+                  <span>Distributer</span>
+                </div>
+              </NavLink>
+            </Menu.Item>
+          )}
           {/* <SubMenu
             key="sub1"
             title={

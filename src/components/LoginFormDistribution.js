@@ -28,7 +28,8 @@ class NormalLoginForm extends Component {
         ax.post(`${baseURL}/signin?username=${values.username}&password=${values.password}`)
           .then(response => {
             localStorage.setItem('token', response.data.data.user.access_token);
-            localStorage.setItem('role', 'admin');
+            localStorage.setItem('role', 'distribution');
+
             this.setState(
               {
                 loading: false
