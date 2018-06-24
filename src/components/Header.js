@@ -16,6 +16,7 @@ const menu = name => (
         to="/login"
         onClick={() => {
           localStorage.removeItem('token');
+          localStorage.removeItem('role');
         }}
       >
         Sign Out
