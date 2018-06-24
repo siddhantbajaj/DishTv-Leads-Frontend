@@ -35,7 +35,7 @@ class NormalLoginForm extends Component {
                 loading: false
               },
               () => {
-                this.props.history.push('/');
+                this.props.history.push('/leads');
               }
             );
           })
