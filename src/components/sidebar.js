@@ -28,7 +28,7 @@ class Sidebar extends React.Component {
               fontSize: '24px'
             }}
           >
-            {this.state.collapsed === false ? role === 'role' ? <div>LEADS</div> : <div>PARTNERS</div> : ''}
+            {this.state.collapsed === false ? role === 'admin' ? <div>LEADS</div> : <div>PARTNERS</div> : ''}
           </div>
         </div>
         <Menu defaultSelectedKeys={['1']} mode="inline" selectedKeys={[location.pathname]}>
