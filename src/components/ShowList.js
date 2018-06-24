@@ -7,6 +7,7 @@ import CountDownTimer from './CountDownTimer';
 import ax from 'axios';
 
 import { baseURL } from '../config/constant';
+import AssignedInfoModal from './AssignedInfoModal';
 
 const TabPane = Tabs.TabPane;
 
@@ -204,13 +205,7 @@ class ShowList extends Component {
             dataSource={data}
             renderItem={item =>
               item.workflow_state === 'assigned' ? (
-                <List.Item
-                  actions={[
-                    <Button onClick={() => {}} type="primary">
-                      Show Info
-                    </Button>
-                  ]}
-                >
+                <List.Item actions={[<AssignedInfoModal text="Show Info" data={item} />]}>
                   <List.Item.Meta avatar={<Avatar src={item.image} />} title={<a href="https://ant.design">{item.name}</a>} description={item.location} />
                   <div>
                     <div>

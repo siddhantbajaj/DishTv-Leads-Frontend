@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { List, Avatar, Button, Spin, Rate, Tabs } from 'antd';
 import Modal from './Modal';
 import InfoModal from './InfoModal';
-import GeoTaggingModal from './GeoTaggingModal';
 import CountDownTimer from './CountDownTimer';
 
 import ax from 'axios';
@@ -161,7 +160,7 @@ class ShowBidList extends Component {
               item.workflow_state === 'active' ? (
                 <List.Item
                   actions={[
-                    <Modal text="Bid" data={item} text2="Place Bid(₹):" updateBasePrice={newPrice => this.createbid(item.id, newPrice)} />,
+                    <Modal text="Bid" data={item} text2="Place Bid(₹):" updateBasePrice={newPrice => this.createbid(item.id, newPrice)} distribution />,
                     <Button onClick={() => {}} type="primary" style={{ width: '195px' }}>
                       <CountDownTimer targetDate={item.timeout} interval={1000} callback={() => this.leadTimeOutAndGetAssignedLeads(item.id)} />
                     </Button>

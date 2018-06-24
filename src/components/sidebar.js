@@ -32,14 +32,16 @@ class Sidebar extends React.Component {
           </div>
         </div>
         <Menu defaultSelectedKeys={['1']} mode="inline" selectedKeys={[location.pathname]}>
-          <Menu.Item key="/">
-            <NavLink to="/">
-              <div style={{ float: 'left' }}>
-                <Icon type="pie-chart" />
-                <span>Home</span>
-              </div>
-            </NavLink>
-          </Menu.Item>
+          {role === 'admin' && (
+            <Menu.Item key="/">
+              <NavLink to="/">
+                <div style={{ float: 'left' }}>
+                  <Icon type="pie-chart" />
+                  <span>Home</span>
+                </div>
+              </NavLink>
+            </Menu.Item>
+          )}
           {role === 'admin' && (
             <Menu.Item key="/leads">
               <NavLink to="/leads">
