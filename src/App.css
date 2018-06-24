@@ -19,8 +19,8 @@
 }
 
 .App-logo-collapsed {
-  height: 80px;
-  width: 59px;
+  height: 78px;
+  width: 62px !important;
 }
 
 .App-header {

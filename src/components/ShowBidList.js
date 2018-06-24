@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { List, Avatar, Button, Spin, Rate, Tabs } from 'antd';
 import Modal from './Modal';
 import InfoModal from './InfoModal';
+import GeoTaggingModal from './GeoTaggingModal';
 import CountDownTimer from './CountDownTimer';
 
 import ax from 'axios';
@@ -19,102 +20,6 @@ const IconText = ({ type, text }) => (
 function callback(key) {
   console.log(key);
 }
-
-// const data = [
-//   {
-//     id: 'sdfdsgdfhfgafsdfdgdfd',
-//     source: 'web form',
-//     rating: 1.5,
-//     location: 'CoWORKs',
-//     basePrice: 30,
-//     name: 'John',
-//     image: 'https://cdn1.iconfinder.com/data/icons/user-pictures/100/female1-512.png',
-//     workFlow_state: 'hold'
-//   },
-//   {
-//     id: 'ejjfhkjh3kjwhkdsfkjdfjh',
-//     source: 'missed call',
-//     rating: 4.5,
-//     location: 'CoWORKs',
-//     basePrice: 200,
-//     name: 'Jenny',
-//     image: 'https://cdn.iconscout.com/public/images/icon/free/png-512/avatar-user-teacher-312a499a08079a12-512x512.png',
-//     workFlow_state: 'escalated'
-//   },
-//   {
-//     id: 'ejjfhkjh3kjwhkdsfkjdfjh',
-//     source: 'missed call',
-//     rating: 2.5,
-//     location: 'CoWORKs',
-//     basePrice: 150,
-//     name: 'Issue',
-//     image: 'https://cdn.iconscout.com/public/images/icon/free/png-512/avatar-user-teacher-312a499a08079a12-512x512.png',
-//     workFlow_state: 'active',
-//     end: 'Sat, 23 Jun 2018 21:56:48 +0530'
-//   },
-//   {
-//     id: 'sdfdsgdfhfgafsdfdgdfd',
-//     source: 'web form',
-//     rating: 3.5,
-//     location: 'CoWORKs',
-//     basePrice: 140,
-//     name: 'John',
-//     image: 'https://cdn1.iconfinder.com/data/icons/user-pictures/100/female1-512.png',
-//     workFlow_state: 'assigned'
-//   },
-//   {
-//     id: 'ejjfhkjh3kjwhkdsfkjdfjh',
-//     source: 'missed call',
-//     rating: 0.5,
-//     location: 'CoWORKs',
-//     basePrice: 50,
-//     name: 'Jenny',
-//     image: 'https://cdn.iconscout.com/public/images/icon/free/png-512/avatar-user-teacher-312a499a08079a12-512x512.png',
-//     workFlow_state: 'escalated'
-//   },
-//   {
-//     id: 'ejjfhkjh3kjwhkdsfkjdfjh',
-//     source: 'missed call',
-//     rating: 4.5,
-//     location: 'CoWORKs',
-//     basePrice: 200,
-//     name: 'Jenny',
-//     image: 'https://cdn.iconscout.com/public/images/icon/free/png-512/avatar-user-teacher-312a499a08079a12-512x512.png',
-//     workFlow_state: 'active',
-//     end: 'June 23, 2018, 22:49'
-//   },
-//   {
-//     id: 'sdfdsgdfhfgafsdfdgdfd',
-//     source: 'web form',
-//     rating: 0.5,
-//     location: 'CoWORKs',
-//     basePrice: 40,
-//     name: 'Maria',
-//     image: 'https://cdn1.iconfinder.com/data/icons/user-pictures/100/female1-512.png',
-//     workFlow_state: 'hold'
-//   },
-//   {
-//     id: 'ejjfhkjh3kjwhkdsfkjdfjh',
-//     source: 'missed call',
-//     rating: 3.5,
-//     location: 'CoWORKs',
-//     basePrice: 100,
-//     name: 'Jenny',
-//     image: 'https://cdn.iconscout.com/public/images/icon/free/png-512/avatar-user-teacher-312a499a08079a12-512x512.png',
-//     workFlow_state: 'escalated'
-//   },
-//   {
-//     id: 'ejjfhkjh3kjwhkdsfkjdfjh',
-//     source: 'missed call',
-//     rating: 4.5,
-//     location: 'CoWORKs',
-//     basePrice: 200,
-//     name: 'Jenny',
-//     image: 'https://cdn.iconscout.com/public/images/icon/free/png-512/avatar-user-teacher-312a499a08079a12-512x512.png',
-//     workFlow_state: 'active',
-//     end: 'June 23, 2018, 20:37'
-//   }
-// ];
 
 class ShowBidList extends Component {
   state = {
@@ -144,7 +49,6 @@ class ShowBidList extends Component {
       });
     });
     await this.getData(bids => {
-      console.log('ffgdfgdfgfdg');
       this.setState({ data: bids });
     });
   }
@@ -201,28 +105,15 @@ class ShowBidList extends Component {
     });
   };
 
-  goLive = id => {
-    const token = localStorage.getItem('token');
-    console.log(token);
-    ax.post(`${baseURL}/mark_live?lead_id=${id}&token=${token}`).then(res => {
-      const data = res.data.data.leads;
-      console.log(data);
-
-      this.setState({
-        data
-      });
-    });
-  };
-
   ///
 
   createbid = (id, price) => {
     const token = localStorage.getItem('token');
     ax.post(`${baseURL}/create_bid?lead_id=${id}&token=${token}&price=${price}`).then(res => {
-      const data = res.data.data.leads;
-
+      const data = res.data.data.bids;
+      console.log('createBids', data);
       this.setState({
-        data
+        currentBid: data
       });
     });
   };
@@ -235,7 +126,16 @@ class ShowBidList extends Component {
         data
       });
     });
-    ax.post(`${baseURL}/assigned_leads?token=${token}`).then(res => {
+
+    ax.get(`${baseURL}/bids?token=${token}`).then(res => {
+      const data = res.data.data.bids;
+      this.setState({
+        currentBid: data
+      });
+    });
+
+    ax.get(`${baseURL}/assigned_leads?token=${token}`).then(res => {
+      console.log(res.data.data.assigned_leads);
       const data = res.data.data.assigned_leads;
       this.setState({
         assignedLeads: data
@@ -317,7 +217,19 @@ class ShowBidList extends Component {
             loadMore={loadMore}
             dataSource={currentBid}
             renderItem={item => (
-              <List.Item actions={[<Modal text="Edit Bid" data={item} text2="Place Bid(₹):" updateBasePrice={newPrice => this.createbid(item.id, newPrice)} />]}>
+              <List.Item
+                actions={[
+                  <Button
+                    style={{
+                      background: this.item.status === 'live' ? 'green' : 'red',
+                      border: this.item.status === 'live' ? '1px solid green' : '1px solid red',
+                      color: 'white'
+                    }}
+                  >
+                    {this.item.status === 'live' ? 'Status: Live' : 'Status: Ended'}
+                  </Button>
+                ]}
+              >
                 <div>
                   <div style={{ textAlign: 'right' }}>{[<IconText type="Price" text={item.price} />]}</div>
                   <div />

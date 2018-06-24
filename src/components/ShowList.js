@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { List, Avatar, Button, Spin, Rate, Tabs } from 'antd';
 import Modal from './Modal';
+import GeoTaggingModal from './GeoTaggingModal';
 import CountDownTimer from './CountDownTimer';
 
 import ax from 'axios';
@@ -18,102 +19,6 @@ const IconText = ({ type, text }) => (
 function callback(key) {
   console.log(key);
 }
-
-// const data = [
-//   {
-//     id: 'sdfdsgdfhfgafsdfdgdfd',
-//     source: 'web form',
-//     rating: 1.5,
-//     location: 'CoWORKs',
-//     basePrice: 30,
-//     name: 'John',
-//     image: 'https://cdn1.iconfinder.com/data/icons/user-pictures/100/female1-512.png',
-//     workFlow_state: 'hold'
-//   },
-//   {
-//     id: 'ejjfhkjh3kjwhkdsfkjdfjh',
-//     source: 'missed call',
-//     rating: 4.5,
-//     location: 'CoWORKs',
-//     basePrice: 200,
-//     name: 'Jenny',
-//     image: 'https://cdn.iconscout.com/public/images/icon/free/png-512/avatar-user-teacher-312a499a08079a12-512x512.png',
-//     workFlow_state: 'escalated'
-//   },
-//   {
-//     id: 'ejjfhkjh3kjwhkdsfkjdfjh',
-//     source: 'missed call',
-//     rating: 2.5,
-//     location: 'CoWORKs',
-//     basePrice: 150,
-//     name: 'Issue',
-//     image: 'https://cdn.iconscout.com/public/images/icon/free/png-512/avatar-user-teacher-312a499a08079a12-512x512.png',
-//     workFlow_state: 'active',
-//     end: 'Sat, 23 Jun 2018 21:56:48 +0530'
-//   },
-//   {
-//     id: 'sdfdsgdfhfgafsdfdgdfd',
-//     source: 'web form',
-//     rating: 3.5,
-//     location: 'CoWORKs',
-//     basePrice: 140,
-//     name: 'John',
-//     image: 'https://cdn1.iconfinder.com/data/icons/user-pictures/100/female1-512.png',
-//     workFlow_state: 'assigned'
-//   },
-//   {
-//     id: 'ejjfhkjh3kjwhkdsfkjdfjh',
-//     source: 'missed call',
-//     rating: 0.5,
-//     location: 'CoWORKs',
-//     basePrice: 50,
-//     name: 'Jenny',
-//     image: 'https://cdn.iconscout.com/public/images/icon/free/png-512/avatar-user-teacher-312a499a08079a12-512x512.png',
-//     workFlow_state: 'escalated'
-//   },
-//   {
-//     id: 'ejjfhkjh3kjwhkdsfkjdfjh',
-//     source: 'missed call',
-//     rating: 4.5,
-//     location: 'CoWORKs',
-//     basePrice: 200,
-//     name: 'Jenny',
-//     image: 'https://cdn.iconscout.com/public/images/icon/free/png-512/avatar-user-teacher-312a499a08079a12-512x512.png',
-//     workFlow_state: 'active',
-//     end: 'June 23, 2018, 22:49'
-//   },
-//   {
-//     id: 'sdfdsgdfhfgafsdfdgdfd',
-//     source: 'web form',
-//     rating: 0.5,
-//     location: 'CoWORKs',
-//     basePrice: 40,
-//     name: 'Maria',
-//     image: 'https://cdn1.iconfinder.com/data/icons/user-pictures/100/female1-512.png',
-//     workFlow_state: 'hold'
-//   },
-//   {
-//     id: 'ejjfhkjh3kjwhkdsfkjdfjh',
-//     source: 'missed call',
-//     rating: 3.5,
-//     location: 'CoWORKs',
-//     basePrice: 100,
-//     name: 'Jenny',
-//     image: 'https://cdn.iconscout.com/public/images/icon/free/png-512/avatar-user-teacher-312a499a08079a12-512x512.png',
-//     workFlow_state: 'escalated'
-//   },
-//   {
-//     id: 'ejjfhkjh3kjwhkdsfkjdfjh',
-//     source: 'missed call',
-//     rating: 4.5,
-//     location: 'CoWORKs',
-//     basePrice: 200,
-//     name: 'Jenny',
-//     image: 'https://cdn.iconscout.com/public/images/icon/free/png-512/avatar-user-teacher-312a499a08079a12-512x512.png',
-//     workFlow_state: 'active',
-//     end: 'June 23, 2018, 20:37'
-//   }
-// ];
 
 class ShowList extends Component {
   state = {
@@ -149,10 +54,10 @@ class ShowList extends Component {
     });
   };
 
-  goLive = id => {
+  goLive = (geoTagging, id) => {
     const token = localStorage.getItem('token');
     console.log(token);
-    ax.post(`${baseURL}/mark_live?lead_id=${id}&token=${token}`).then(res => {
+    ax.post(`${baseURL}/mark_live?lead_id=${id}&token=${token}&geo_tag=${geoTagging}`).then(res => {
       const data = res.data.data.leads;
       console.log(data);
 
@@ -203,16 +108,17 @@ class ShowList extends Component {
                 <List.Item
                   actions={[
                     <Modal text="Edit" data={item} text2="Base Price(₹):" updateBasePrice={newPrice => this.updateBasePrice(item.id, newPrice)} />,
-                    <Button
-                      onClick={() => this.goLive(item.id)}
+                    <GeoTaggingModal
+                      text="Go Live"
                       style={{
                         background: 'green',
                         border: '1px solid green',
                         color: 'white'
                       }}
-                    >
-                      Go Live
-                    </Button>
+                      data={item}
+                      title="Do you want to use geo tagging ?"
+                      goLive={geoTag => this.goLive(geoTag, item.id)}
+                    />
                   ]}
                 >
                   <List.Item.Meta avatar={<Avatar src={item.image} />} title={<a href="https://ant.design">{item.name}</a>} description={item.location} />

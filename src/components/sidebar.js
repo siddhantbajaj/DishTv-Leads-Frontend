@@ -20,22 +20,15 @@ class Sidebar extends React.Component {
       <Sider collapsible collapsed={this.state.collapsed} onCollapse={this.onCollapse} breakpoint="sm">
         <div className="logo">
           <img className={this.state.collapsed === true ? 'App-logo-collapsed' : 'App-logo'} src={logo} style={{ width: '166px' }} />
-          {this.state.collapsed === false ? (
-            <div style={{ position: 'relative', marginLeft: '-38px', transform: 'scale(0.75)' }}>
-              <b
-                style={{
-                  position: 'absolute',
-                  top: '14px',
-                  left: '111px'
-                }}
-              >
-                LEADS
-              </b>
-            </div>
-          ) : (
-            ''
-          )}
-          {/* {!this.state.collapsed ? <AppTitle /> : null} */}
+          <div
+            style={{
+              marginTop: '-16px',
+              marginBottom: '13px',
+              fontSize: '24px'
+            }}
+          >
+            {this.state.collapsed === false ? <div>LEADS</div> : ''}
+          </div>
         </div>
         <Menu defaultSelectedKeys={['1']} mode="inline" selectedKeys={[location.pathname]}>
           <Menu.Item key="/">

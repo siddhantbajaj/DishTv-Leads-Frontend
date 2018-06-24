@@ -12,7 +12,14 @@ const menu = name => (
     <Menu.Item key="3">About</Menu.Item>
     <Menu.Divider />
     <Menu.Item key="4">
-      <Link to="/login">Sign Out</Link>
+      <Link
+        to="/login"
+        onClick={() => {
+          localStorage.removeItem('token');
+        }}
+      >
+        Sign Out
+      </Link>
     </Menu.Item>
   </Menu>
 );
