@@ -215,18 +215,18 @@ class ShowBidList extends Component {
             loading={loading}
             itemLayout="horizontal"
             loadMore={loadMore}
-            dataSource={data}
+            dataSource={currentBid}
             renderItem={(item, index) => (
               <List.Item
                 actions={[
                   <Button
                     style={{
-                      background: this.item.status === 'live' ? 'green' : 'red',
-                      border: this.item.status === 'live' ? '1px solid green' : '1px solid red',
+                      background: item.status ? 'green' : 'red',
+                      border: item.status ? '1px solid green' : '1px solid red',
                       color: 'white'
                     }}
                   >
-                    {this.item.status === 'live' ? 'Status: Live' : 'Status: Ended'}
+                    {item.status ? 'Status: Live' : 'Status: Ended'}
                   </Button>
                 ]}
               >
