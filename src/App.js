@@ -5,6 +5,7 @@ import Login from './pages/login';
 import PrivateRoute from './components/PrivateRoute';
 import MainLayout from './components/MainLayout';
 import Leads from './pages/leads';
+import Call from './pages/call';
 import Distributers from './pages/distributers';
 import LoginDistributers from './pages/loginDistributers';
 
@@ -26,6 +27,7 @@ class App extends Component {
           <PrivateRoute component={MainLayout} path="/" />
           <PrivateRoute component={Leads} path="/leads" />
           <PrivateRoute component={Distributers} path="/distributers" />
+          <PrivateRoute component={Call} path="/call" />
         </Switch>
       </div>
     );

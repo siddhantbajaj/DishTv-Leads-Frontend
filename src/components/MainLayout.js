@@ -8,6 +8,7 @@ import Distributer from '../pages/distributers';
 
 import Sidebar from './sidebar';
 import AppHeader from './Header';
+import Call from '../pages/call';
 
 const { Header, Footer, Content } = Layout;
 
@@ -26,6 +27,7 @@ class MainLayout extends Component {
                 <Route exact component={Home} path="/" />
                 <Route component={Leads} path="/leads" />
                 <Route component={Distributer} path="/distributer" />
+                <Route component={Call} path="/call" />
               </Switch>
             </Content>
             <Footer>footer</Footer>

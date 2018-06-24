@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import ShowBidList from '../components/ShowBidList';
 
-class Leads extends Component {
+class Distributer extends Component {
   render() {
     return (
       <div style={{ padding: '20px' }}>
@@ -11,4 +11,4 @@ class Leads extends Component {
   }
 }
 
-export default Leads;
+export default Distributer;
